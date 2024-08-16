@@ -1,4 +1,4 @@
-package com.henrique.keycloakdemo.application.dtos;
+package com.henrique.keycloakdemo.application.dtos.animal;
 
 import java.util.UUID;
 

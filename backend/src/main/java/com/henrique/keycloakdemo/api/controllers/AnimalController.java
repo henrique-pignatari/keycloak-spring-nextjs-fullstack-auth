@@ -1,7 +1,7 @@
 package com.henrique.keycloakdemo.api.controllers;
 
-import com.henrique.keycloakdemo.application.dtos.AnimalCreateRequestDTO;
-import com.henrique.keycloakdemo.application.dtos.AnimalResponseDTO;
+import com.henrique.keycloakdemo.application.dtos.animal.AnimalCreateRequestDTO;
+import com.henrique.keycloakdemo.application.dtos.animal.AnimalResponseDTO;
 import com.henrique.keycloakdemo.application.services.AnimalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.henrique.keycloakdemo.api.controllers;
 
-import com.henrique.keycloakdemo.application.contact.ContactCreateDTO;
+import com.henrique.keycloakdemo.application.dtos.contact.ContactCreateDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
