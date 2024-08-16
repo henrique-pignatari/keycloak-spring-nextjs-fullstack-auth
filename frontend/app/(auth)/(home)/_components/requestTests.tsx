@@ -48,7 +48,7 @@ export function RequestTests({ changeText }: RequestTestsProps) {
   return (
     <div className="flex flex-col border rounded-md py-3 px-4 gap-4">
       <div className="flex flex-row justify-between items-center">
-        <h2>CSRF TESTS:</h2>
+        <h2>REQUEST TESTS:</h2>
       </div>
       <div className="flex flex-row gap-2">
         <button

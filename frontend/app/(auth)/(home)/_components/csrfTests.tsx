@@ -48,7 +48,6 @@ export function CsrfTests({ changeText }: CsrfTestsProps) {
   function handleCookieReset() {
     var Cookies = document.cookie.split(";");
     for (var i = 0; i < Cookies.length; i++) {
-      console.log(Cookies);
       document.cookie = Cookies[i] + "=; expires=" + new Date(0).toUTCString();
     }
     setCookie(document.cookie);
