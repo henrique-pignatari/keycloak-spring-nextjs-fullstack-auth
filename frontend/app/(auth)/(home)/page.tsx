@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CsrfTests } from "./_components/csrfTests";
+import { RequestTests } from "./_components/requestTests";
 
 export default function HomePage() {
   const [text, setText] = useState("Nenhum texto encontrado");
@@ -14,6 +15,7 @@ export default function HomePage() {
       <h1>{text}</h1>
       <div className="flex flex-row items-center justify-center gap-4">
         <CsrfTests changeText={changeText} />
+        <RequestTests changeText={changeText} />
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ function headerAuthorizationIntercepter(config: InternalAxiosRequestConfig) {
 
   if (userString) {
     const user = User.fromStorageString(userString);
-    config.headers.Authorization = user.access_token;
+    config.headers.Authorization = "Bearer " + user.access_token;
   }
 
   return config;
