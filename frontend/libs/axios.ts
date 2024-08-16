@@ -1,10 +1,9 @@
+import { API_HOST, OIDC_AUTHORITY, OIDC_CLIENT } from "@/constants/env";
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { User } from "oidc-client-ts";
 
 function headerAuthorizationIntercepter(config: InternalAxiosRequestConfig) {
-  const userString = sessionStorage.getItem(
-    "oidc.user:http://localhost:8180/realms/demo-keycloak:next-test"
-  );
+  const userString = sessionStorage.getItem(`oidc.user:${OIDC_AUTHORITY}:${OIDC_CLIENT}`);
 
   if (userString) {
     const user = User.fromStorageString(userString);
@@ -15,7 +14,7 @@ function headerAuthorizationIntercepter(config: InternalAxiosRequestConfig) {
 }
 
 export const api = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: API_HOST,
   withXSRFToken: true,
   withCredentials: true,
 });
