@@ -59,9 +59,9 @@ export function CsrfTests({ changeText }: CsrfTestsProps) {
         <h2>
           CSRF TESTS:{" "}
           {cookie ? (
-            <span className="text-green-700">COOKIE SETADO</span>
+            <span className="text-green-700">COOKIES SET</span>
           ) : (
-            <span className="text-red-700">SEM COOKIE</span>
+            <span className="text-red-700">NO COOKIE</span>
           )}
         </h2>
         {cookie && (

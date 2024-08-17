@@ -5,7 +5,7 @@ import { CsrfTests } from "./_components/csrfTests";
 import { RequestTests } from "./_components/requestTests";
 
 export default function HomePage() {
-  const [text, setText] = useState("Nenhum texto encontrado");
+  const [text, setText] = useState("No text found");
   function changeText(newText: string) {
     setText(newText);
   }
