@@ -3,6 +3,7 @@ package com.henrique.keycloakdemo.infra.security.config;
 import com.henrique.keycloakdemo.infra.security.filters.CsrfCookieFilter;
 import com.henrique.keycloakdemo.infra.security.handlers.CustomAccessDeniedHandler;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,9 +18,13 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
+
+    @Value("${security.corsorigins}")
+    private String corsOrigins;
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -46,11 +51,11 @@ public class SecurityConfig {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration config = new CorsConfiguration();
-                config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                config.setAllowedOrigins(List.of(corsOrigins.split(",")));
                 config.setAllowedMethods(Collections.singletonList("*"));
                 config.setAllowCredentials(true);
                 config.setAllowedHeaders(Collections.singletonList("*"));
-                config.setExposedHeaders(Arrays.asList("Authorization"));
+                config.setExposedHeaders(List.of("Authorization"));
                 config.setMaxAge(3600L);
                 return config;
             }

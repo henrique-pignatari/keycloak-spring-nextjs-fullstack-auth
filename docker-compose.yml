@@ -1,4 +1,42 @@
 services:
+  postgres:
+    image: postgres:16.2
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: kcDb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: senha123
+    networks:
+      - keycloak_network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.6
+    command: start --import-realm
+    environment:
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8180
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/kcDb
+      KC_DB_USERNAME: admin
+      KC_DB_PASSWORD: senha123
+    ports:
+      - 8180:8080
+    restart: always
+    volumes:
+      - ./data/imports/demo-keycloak.json:/opt/keycloak/data/import/demo-keycloak.json
+    depends_on:
+      - postgres
+    networks:
+      - keycloak_network
+
   appdb:
     image: postgres:16.2
     volumes:
@@ -9,20 +47,58 @@ services:
       POSTGRES_PASSWORD: senha123
     ports:
       - "5432:5432"
+    networks:
+      - app_network
 
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    restart: always
+  api:
+    container_name: api
+    hostname: api
+    build: "./backend"
     ports:
-      - "5050:80"
+      - "8080:8080"
+    depends_on:
+      - appdb
+      - keycloak
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@email.com
-      - PGADMIN_DEFAULT_PASSWORD=senha123
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
+      - ENVIRONMENT=prod
+      - CORS_ORIGINS=http://localhost:3000,https://localhost
+      - DATABASE_HOST=appdb
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=keycloakdemo
+      - DATABASE_USERNAME=admin
+      - DATABASE_PASSWORD=senha123
+      - SESSION_TIMEOUT:20m
+      - JWK_SET_URI=http://keycloak:8080/realms/demo-keycloak/protocol/openid-connect/certs
+      - JPA_SHOW_SQL=true
+      - HIBERNATE_FORMAT_SQL=true
+    networks:
+      - app_network
+      - keycloak_network
+
+  front:
+    container_name: front
+    hostname: front
+    build:
+      context: "./frontend"
+      args:
+        - NEXT_PUBLIC_API_HOST=http://localhost:8080
+        - NEXT_PUBLIC_OIDC_AUTHORITY=http://localhost:8180/realms/demo-keycloak
+        - NEXT_PUBLIC_OIDC_CLIENT=next-test
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+    networks:
+      - app_network
 
 volumes:
+  postgres_data:
+    driver: local
   appdb_data:
     driver: local
-  pgadmin_data:
+
+networks:
+  app_network:
+    driver: bridge
+  keycloak_network:
+    driver: bridge
