@@ -11,8 +11,7 @@ services:
       - keycloak_network
 
   keycloak:
-    image: quay.io/keycloak/keycloak:23.0.6
-    command: start --import-realm
+    build: "./keycloakfy-themes"
     environment:
       KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
       KC_HOSTNAME: localhost
